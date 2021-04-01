@@ -1,5 +1,26 @@
 <?php
 session_start();
+include 'db_connection.php';
+
+if(isset($_SESSION['name'])){
+  header("Location:home.php");
+}else if(isset($_POST['register'])){
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $password = password_hash($_POST['password'],PASSWORD_DEFAULT);
+
+    $conn = OpenCon();
+
+    $sql = "INSERT INTO user (Name, Email, Password)
+            VALUES ('$name', '$email', '$password')";
+
+    if ($conn->query($sql) === TRUE) {
+        header("Location:login.php?register=true");
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+
+}else if(isset($_GET['regist'])){
 ?>
 <html>
     <head>
@@ -25,25 +46,5 @@ session_start();
     </body>
 </html>
 <?php
-include 'db_connection.php';
-
-if(isset($_SESSION['name'])){
-  header("Location:home.php");
-}else if(isset($_POST['register'])){
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $password = 'Bearer'.password_hash($_POST['password'],PASSWORD_DEFAULT);
-
-    $conn = OpenCon();
-
-    $sql = "INSERT INTO user (Name, Email, Password)
-            VALUES ('$name', '$email', '$password')";
-
-    if ($conn->query($sql) === TRUE) {
-        header("Location:login.php");
-    } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
-    }
-
 }
 ?>

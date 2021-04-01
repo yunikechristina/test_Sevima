@@ -6,16 +6,20 @@ if(isset($_POST['login'])){
         echo "<script type='text/javascript'>alert('Please fill correct email and password');</script>";
     }else{
         $email = $_POST['email'];
-        $password = 'Bearer'.password_hash($_POST['password'],PASSWORD_DEFAULT);
+        $password = $_POST['password'];
         $conn = OpenCon();
-        $sql = "SELECT * FROM user WHERE email = '$email' AND password = '$password'";
+        $sql = "SELECT * FROM user WHERE Email = '$email'";
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
+              echo "<script type='text/javascript'>alert('".password_verify($password,$row['Password'])."');</script>";
+              if(password_verify($password,$row['Password'])){
                 $_SESSION['name'] = $row['Name'];
                 $_SESSION['user_id'] = $row['Id_User'];
+              }
             }
             if(isset($_SESSION['name'])){
+              
                 $conn = OpenCon();
                 $sql = "UPDATE user SET Last_Login = CURRENT_TIMESTAMP";
                 if ($conn->query($sql) === TRUE) {
@@ -31,7 +35,7 @@ if(isset($_POST['login'])){
 }else if(isset($_SESSION['name'])){
     header("Location:home.php");
 }else if(isset($_POST['regist'])){
-    header("Location:regist.php");
+    header("Location:regist.php?regist=true");
 }
 
 ?>
@@ -49,12 +53,12 @@ if(isset($_POST['login'])){
     <h2>Welcome To INSTAAPP</h2>
 
     <!-- Login Form -->
-    <form action="regist.php" method="POST">
-      <input type="text" id="login" class="fadeIn second" name="email" placeholder="login">
-      <input type="text" id="password" class="fadeIn third" name="password" placeholder="password">
+    <form action="#" method="POST">
+      <input type="text" id="login" class="fadeIn second" name="email" placeholder="email">
+      <input type="password" id="password" class="fadeIn third" name="password" placeholder="password">
       <input type="submit" name="login" class="fadeIn fourth" value="Log In">
       <?php
-        if(!isset($_POST['register'])){
+        if(!isset($_GET['register'])){
       ?>
         <input type="submit" name="regist" class="fadeIn fourth" value="Sign Up">
       <?php }?>
