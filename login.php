@@ -25,8 +25,8 @@ if(isset($_POST['login'])){
                 }
             }
         }
-        
-        
+
+
     }
 }else if(isset($_SESSION['name'])){
     header("Location:home.php");
@@ -49,17 +49,16 @@ if(isset($_POST['login'])){
     <h2>Welcome To INSTAAPP</h2>
 
     <!-- Login Form -->
-    <form action="#" method="POST">
+    <form action="regist.php" method="POST">
       <input type="text" id="login" class="fadeIn second" name="email" placeholder="login">
       <input type="text" id="password" class="fadeIn third" name="password" placeholder="password">
       <input type="submit" name="login" class="fadeIn fourth" value="Log In">
-      <?php 
+      <?php
         if(!isset($_POST['register'])){
       ?>
-      <input type="submit" name="regist" class="fadeIn fourth" value="Sign Up">
+        <input type="submit" name="regist" class="fadeIn fourth" value="Sign Up">
       <?php }?>
     </form>
-
   </div>
 </div>
 </body>
